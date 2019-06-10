@@ -1,0 +1,4 @@
+logging:
+  level: INFO
+  loggers:
+    pt.lucas2010: DEBUG
