@@ -1,0 +1,25 @@
+hosts
+ lucasVM1.local: 192.168.122.30 (master)
+ lucasVM2.local: 192.168.122.103 (worker)
+ lucasVM3.local: 192.168.122.? (worker)
+
+
+Pods - accessible only from inside cluster (from within every host)
+ in host lucasVM2.local
+  http://10.244.1.7:8080/hello-world?name=lucas
+  http://10.244.1.8:8080/hello-world?name=lucas
+ in host lucasVM3.local
+
+Cluster IP (10.106.37.86:6379) - accessible only from inside cluster (from within every host)
+http://10.106.37.86:6379/hello-world?name=lucas
+
+
+NodePort (31929) - accessible both from outside and inside cluster (from within every host)
+http://lucasVM1.local:31929/hello-world?name=lucas
+http://lucasVM2.local:31929/hello-world?name=lucas
+http://lucasVM3.local:31929/hello-world?name=lucas
+
+
+DNS - accessible only from inside pods
+
+http://dwrest2:6379/hello-world?name=lucas
