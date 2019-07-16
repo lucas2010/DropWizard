@@ -1,11 +1,37 @@
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-sharedvolume-0
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: lucasLab.local
+    path: "/home/lucas/NFS/SharedVolume-01"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-sharedvolume-1
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: lucasLab.local
+    path: "/home/lucas/NFS/SharedVolume-02"
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: dwrest2
   labels:
     app: dropwizard-restful-test2
 spec:
-  type: NodePort
+  clusterIP: None
   ports:
     - port: 6379
       targetPort: 8080
@@ -13,16 +39,17 @@ spec:
     app: dropwizard-restful-test2
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: dropwizard-deployment
+  name: dropwizard-statefulset
   labels:
     app: dropwizard-restful-test2
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
       app: dropwizard-restful-test2
+  serviceName: dwrest2
   template:
     metadata:
       labels:
@@ -34,12 +61,8 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - name: vol
+            - name: nfs-sharedvolume
               mountPath: /srv/dropwizardRestfulTest2/volume
-      volumes:
-        - name: vol
-          hostPath:
-            path: /home/lucas/VirtualSAN
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -52,3 +75,12 @@ spec:
                       values:
                         - dropwizard-restful-test2
                 topologyKey: "kubernetes.io/hostname"
+  volumeClaimTemplates:
+    - metadata:
+        name: nfs-sharedvolume
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: ""
+        resources:
+          requests:
+            storage: 1Gi
