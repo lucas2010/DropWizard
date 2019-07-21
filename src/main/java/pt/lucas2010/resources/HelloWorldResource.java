@@ -2,13 +2,18 @@ package pt.lucas2010.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import pt.lucas2010.api.Saying;
+import pt.lucas2010.db.CassandraDAL;
+import pt.lucas2010.db.ICassandraDAL;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -19,11 +24,16 @@ public class HelloWorldResource {
     private final String template;
     private final String defaultName;
     private final AtomicLong counter;
+//    @Inject
+    private ICassandraDAL cassandraDAL;
 
-    public HelloWorldResource(String template, String defaultName) {
+
+    public HelloWorldResource(String template, String defaultName, ICassandraDAL cassandraDAL) {
         this.template = template;
         this.defaultName = defaultName;
         this.counter = new AtomicLong();
+        this.cassandraDAL = cassandraDAL;
+
     }
 
     @GET
@@ -51,6 +61,15 @@ public class HelloWorldResource {
             th.printStackTrace();
         }
 
+        String cassandraRecord = this.cassandraDAL.getObject("adfsdertg");
+
+        say.setCassandraRecord(cassandraRecord);
+
         return say;
+    }
+
+
+    public void setCassandraDAL(CassandraDAL cassandraDAL) {
+        this.cassandraDAL = cassandraDAL;
     }
 }

@@ -13,15 +13,18 @@ public class Saying {
 
     private String fileContent;
 
+    private String cassandraRecord;
+
     public Saying() {
         // Jackson deserialization
     }
 
-    public Saying(long id, String content, String stackDump, String fileContent) {
+    public Saying(long id, String content, String stackDump, String fileContent, String cassandraRecord) {
         this.id = id;
         this.content = content;
         this.stackDump = stackDump;
         this.fileContent = fileContent;
+        this.cassandraRecord = cassandraRecord;
     }
 
     public Saying(long id, String content) {
@@ -49,7 +52,15 @@ public class Saying {
         return fileContent;
     }
 
-    public void setFileContent(String fileContent){ this.fileContent = fileContent;}
+    @JsonProperty
+    public String getCassandraRecord() {
+        return cassandraRecord;
+    }
 
-    public void setStackDump(String stackDump){ this.stackDump = stackDump;}
+
+    public void setFileContent(String fileContent){ this.fileContent = fileContent; }
+
+    public void setStackDump(String stackDump){ this.stackDump = stackDump; }
+
+    public void setCassandraRecord(String cassandraRecord){ this.cassandraRecord = cassandraRecord; }
 }

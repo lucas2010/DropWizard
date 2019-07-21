@@ -8,7 +8,7 @@
 
     <groupId>pt.lucas2010</groupId>
     <artifactId>dropwizard_restful_test2</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>dropwizardRestfulTest2</name>
@@ -63,7 +63,20 @@
             <groupId>javax.activation</groupId>
             <artifactId>activation</artifactId>
             <version>1.1.1</version>
-        </dependency>    </dependencies>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.datastax.oss/java-driver-core -->
+        <dependency>
+            <groupId>com.datastax.oss</groupId>
+            <artifactId>java-driver-core</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-mapping -->
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-mapping</artifactId>
+            <version>3.7.2</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
